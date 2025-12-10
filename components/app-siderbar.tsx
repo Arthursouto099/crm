@@ -1,71 +1,77 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
+"use client";
+import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { ModeToggle } from "./toggle-theme"
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import useAuthContext from "@/hooks/use-auth";
+import { ModeToggle } from "./toggle-theme";
 
-// Menu items.
 const items = [
-    {
-        title: "Home",
-        url: "#",
-        icon: Home,
-    },
-    {
-        title: "Inbox",
-        url: "#",
-        icon: Inbox,
-    },
-    {
-        title: "Calendar",
-        url: "#",
-        icon: Calendar,
-    },
-    {
-        title: "Search",
-        url: "#",
-        icon: Search,
-    },
-    {
-        title: "Settings",
-        url: "#",
-        icon: Settings,
-    },
-]
+  { title: "Home",     url: "#", icon: Home },
+  { title: "Inbox",    url: "#", icon: Inbox },
+  { title: "Calendar", url: "#", icon: Calendar },
+  { title: "Search",   url: "#", icon: Search },
+  { title: "Settings", url: "#", icon: Settings },
+];
 
 export function AppSidebar() {
-    return (
-        <Sidebar>
-            <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupLabel>Application</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-            </SidebarContent>
-            <div className="p-5">
-                <ModeToggle/>
+  const { user } = useAuthContext();
+
+  return (
+    <Sidebar>
+      <SidebarContent className="flex flex-col justify-between">
+        <SidebarGroup>
+          
+
+          <SidebarGroupContent>
+            {/* Bloco do usuário */}
+            <div className="flex items-center gap-3 px-2 py-3 mb-3 rounded-md bg-muted/40">
+              <Avatar className="h-9 w-9">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>
+                  {user?.name?.[0]?.toUpperCase() ?? "U"}
+                </AvatarFallback>
+              </Avatar>
+
+              <div className="flex flex-col text-[12px] leading-tight">
+                <h1 className="font-medium truncate">
+                  {user?.name ?? "Usuário"}
+                </h1>
+                <h2 className="text-muted-foreground truncate">
+                  {user?.email}
+                </h2>
+              </div>
             </div>
-        </Sidebar>
-    )
+
+            {/* Menu */}
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url} className="flex items-center gap-2">
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Rodapé (toggle de tema) */}
+        <div className="p-3 pb-5">
+          <ModeToggle />
+        </div>
+      </SidebarContent>
+    </Sidebar>
+  );
 }

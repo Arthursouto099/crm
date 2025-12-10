@@ -131,3 +131,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE e Edge antigo */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  display: none;             /* Chrome, Safari, Edge novo */
+}
+
+@keyframes fadeIn {
+  from { opacity: .4; }
+  to { opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn .25s ease-in-out;
+}

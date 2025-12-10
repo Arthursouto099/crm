@@ -1,6 +1,8 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
+import AuthUserProvider from "@/providers/AuthUserProvider";
 
 export const metadata: Metadata = {
     title: "My App",
@@ -22,7 +24,14 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    {children}
+                    <AuthUserProvider>
+                              {children}
+                    </AuthUserProvider>
+                  
+                    <Toaster 
+                    
+                    position="top-right"
+                    />
                 </ThemeProvider>
             </body>
         </html>
