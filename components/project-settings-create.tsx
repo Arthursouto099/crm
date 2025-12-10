@@ -66,7 +66,7 @@ export default function ProjectSettings({onCreated}: ProjectsSettingsProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="default" className="flex items-center gap-1">
+        <Button variant="default"  className="flex bg-violet-600 hover:bg-violet-400 text-white items-center gap-1">
           <PlusCircle /> Iniciar Projeto
         </Button>
       </SheetTrigger>

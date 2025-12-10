@@ -49,52 +49,22 @@ export default function Projects() {
             Dashboard Projetos
           </p>
 
-          <h1 className="scroll-m-20 text-balance text-3xl font-semibold leading-tight md:text-4xl">
+          <h1 className="border-violet-600/50 border-b-[0.1px] pb-1 scroll-m-20 text-balance text-3xl font-semibold leading-tight md:text-4xl">
             Bem-vindo de volta,{" "}
             <span className="text-primary">{user?.name}</span>.
           </h1>
 
+
           <p className="text-sm text-muted-foreground md:text-base">
             Que bom te ver novamente. Aqui estão todos os seus projetos:
           </p>
-        </div>
-
-        {/* Ações: busca + novo projeto */}
-        <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center md:justify-end">
-          {/* Campo de busca */}
-          <div className="w-full md:w-64 lg:w-72">
-            <Input
-              onChange={(e) => setFilter(e.target.value)}
-              placeholder="Pesquisar projeto..."
-              className="h-10 w-full"
-            />
-          </div>
-             <div className="">
-               <SelectByDate
-              onSelect={(e) => {
-                setFilterDate(e);
-              }}
-            />
-          </div>
-
-          {/* Botão de novo projeto */}
-          <div className="shrink-0">
-            <ProjectSettings
-          
-              onCreated={() => {
-                setDataProjectList();
-              }}
-            />
-          </div>
-
-       
         </div>
       </div>
 
     
 
       <div className=" w-full mt-6  flex  md:w-full h-full">
-        <ProjectCardsSection data={filterByDate} />
+        <ProjectCardsSection  />
       </div>
     </section>
   );
@@ -111,14 +81,41 @@ export function SelectByDate({ onSelect }: SelectByDateProps) {
         onSelect(e);
       }}
     >
-      <SelectTrigger className="w-[130px]">
-        <SelectValue placeholder="Ordenar por:" />
+      <SelectTrigger className="w-[170px]">
+        <SelectValue placeholder="Ordenar por data" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Ordenar por data</SelectLabel>
           <SelectItem value="news">Mais Antigo</SelectItem>
           <SelectItem value="olds">Mais Novo</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+}
+
+interface SelectByStatusProps {
+  onSelect: (e: string) => void;
+}
+
+
+export function SelectByStatus({ onSelect }: SelectByStatusProps) {
+  return (
+    <Select
+      onValueChange={(e) => {
+        onSelect(e);
+      }}
+    >
+      <SelectTrigger className="w-[170px]">
+        <SelectValue placeholder="Ordenar por status" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Ordenar por Status</SelectLabel>
+          <SelectItem value="ACTIVE">Ativos</SelectItem>
+          <SelectItem value="ARCHIVED">Arquivados</SelectItem>
+          <SelectItem value="DRAFT">Rascunhos</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

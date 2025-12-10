@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Project } from "@/api/types/project.types";
 import {
   AlertCircle,
@@ -6,20 +6,22 @@ import {
   BadgeCheck,
   ClipboardList,
   Users,
+  ArchiveIcon,
+  CheckCheckIcon,
+  Pen
 } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "../ui/progress";
+import { Badge } from "../ui/badge";
+
 
 export function ProjectCard({ data }: { data: Project }) {
   return (
-    <Link href={`/dashboard/projects/${data.id_project}`} className="block">
+    <Link href={`/dashboard/projects/${data.id_project}`}>
       <div
         className="
-        
-         relative
-          
+           relative
           transition-all hover:scale-[1.01] hover:shadow-lg hover:brightness-110
-
           h-[350px]      /* <— altura fixa */
           * <— altura maior no desktop, opcional */
          rounded-xl
@@ -54,7 +56,17 @@ export function ProjectCard({ data }: { data: Project }) {
         {/* Área de conteúdo */}
         <div className="relative z-10 p-4 md:p-6 h-full flex flex-col justify-between">
           {/* Topo: título + status */}
-          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-4">
+          <div className="flex flex-col items-end  md:gap-4">
+           
+            <Badge className={`
+            border-none 
+              ${data.status === "ACTIVE" ? "bg-green-600/50 " : data.status === "ARCHIVED" ? "bg-orange-600/50" : "bg-red-600/50"}
+              `} variant={"outline"}>{  
+              data.status === "ACTIVE" ? <CheckCheckIcon className="m-1"/> : data.status === "ARCHIVED" ? <Archive className="m-1"/> : <Pen className="m-1"/>
+              }</Badge>
+          </div>
+
+          <div className=" flex flex-col  w-full    gap-4 text-white/90 text-xs md:text-sm">
             <div className="max-w-full md:max-w-[70%]">
               <h1
                 className="
@@ -79,38 +91,6 @@ export function ProjectCard({ data }: { data: Project }) {
               >
                 {data.description}
               </p>
-            </div>
-
-            <div className="flex items-center gap-1 self-start md:self-auto shrink-0 bg-black/40 px-2 py-1 rounded-full">
-              {data.status === "ACTIVE" ? (
-                <BadgeCheck size={16} className="text-green-400" />
-              ) : data.status === "ARCHIVED" ? (
-                <Archive size={16} className="text-orange-400" />
-              ) : (
-                <AlertCircle size={16} className="text-red-400" />
-              )}
-              <span className="text-xs md:text-xs font-medium text-white">
-                {data.status}
-              </span>
-            </div>
-          </div>
-
-          {/* Rodapé: métricas */}
-          <div className="mt-4 flex flex-col gap-4 text-white/90 text-xs md:text-sm">
-            <div className="flex gap-4">
-              <div className="flex items-center gap-2">
-                <Users size={16} /> <span>1</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <ClipboardList size={16} /> <span>10</span>
-              </div>
-            </div>
-            
-            <div className="h-[0.1px] w-full bg-accent-foreground/20"></div>
-
-            <div className="w-full flex gap-2 items-center">
-              <h1>60%</h1>
-              <Progress value={60} />
             </div>
           </div>
         </div>
