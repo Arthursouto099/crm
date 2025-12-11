@@ -1,17 +1,12 @@
 "use client";
 import { Project } from "@/api/types/project.types";
 import {
-  AlertCircle,
   Archive,
-  BadgeCheck,
-  ClipboardList,
-  Users,
-  ArchiveIcon,
   CheckCheckIcon,
-  Pen
+  Pen,
+  Tags
 } from "lucide-react";
 import Link from "next/link";
-import { Progress } from "../ui/progress";
 import { Badge } from "../ui/badge";
 
 
@@ -50,16 +45,23 @@ export function ProjectCard({ data }: { data: Project }) {
           backgroundPosition: "center",
         }}
       >
+
+   
         {/* Overlay sutil */}
         <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.9px]" />
 
         {/* Área de conteúdo */}
         <div className="relative z-10 p-4 md:p-6 h-full flex flex-col justify-between">
           {/* Topo: título + status */}
-          <div className="flex flex-col items-end  md:gap-4">
-           
+          <div className="flex  justify-between items-end  md:gap-4">
+
+            <div className="bg-black/30 p-1   capitalize text-xs text-white rounded-md">
+              <h1 className="flex items-center gap-1"> <Tags size={17}/> {data.category.toLocaleLowerCase()}   </h1>
+            </div>
+
             <Badge className={`
             border-none 
+            text-white
               ${data.status === "ACTIVE" ? "bg-green-600/50 " : data.status === "ARCHIVED" ? "bg-orange-600/50" : "bg-red-600/50"}
               `} variant={"outline"}>{  
               data.status === "ACTIVE" ? <CheckCheckIcon className="m-1"/> : data.status === "ARCHIVED" ? <Archive className="m-1"/> : <Pen className="m-1"/>
@@ -75,6 +77,7 @@ export function ProjectCard({ data }: { data: Project }) {
                   text-white 
                   line-clamp-2 
                   wrap-break-word
+                  uppercase
                 "
               >
                 {data.title}

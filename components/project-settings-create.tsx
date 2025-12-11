@@ -8,6 +8,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { FormEvent, ReactNode } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -25,12 +33,13 @@ import { toast } from "sonner";
 import useAuthContext from "@/hooks/use-auth";
 import { PlusCircle } from "lucide-react";
 import { Project } from "@/api/types/project.types";
+import { get } from "http";
 
 interface ProjectsSettingsProps {
-  onCreated: (data: Project) => void
+  onCreated: (data: Project) => void;
 }
 
-export default function ProjectSettings({onCreated}: ProjectsSettingsProps) {
+export default function ProjectSettings({ onCreated }: ProjectsSettingsProps) {
   const { token, isAuthenticated } = useAuthContext();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -49,11 +58,11 @@ export default function ProjectSettings({onCreated}: ProjectsSettingsProps) {
         formData.get("title") as string,
         formData.get("description") as string,
         isPublic as boolean,
+        formData.get('category') as string,
         token as string
       );
 
-
-      onCreated(data.user)
+      onCreated(data.user);
 
       toast.success("Projeto criado com sucesso");
 
@@ -64,19 +73,22 @@ export default function ProjectSettings({onCreated}: ProjectsSettingsProps) {
   };
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="default"  className="flex bg-violet-600 hover:bg-violet-400 text-white items-center gap-1">
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          variant="default"
+          className="flex bg-violet-600 hover:bg-violet-400 text-white items-center gap-1"
+        >
           <PlusCircle /> Iniciar Projeto
         </Button>
-      </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Criar Projeto</SheetTitle>
-          <SheetDescription>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Criar Projeto</DialogTitle>
+          <DialogDescription>
             Gerencie seu projeto, adicione colaboradors, ou gerencie de maneira
             solo.
-          </SheetDescription>
+          </DialogDescription>
 
           <form
             onSubmit={(e) => onSubmit(e)}
@@ -94,6 +106,10 @@ export default function ProjectSettings({onCreated}: ProjectsSettingsProps) {
               />
             </div>
             <div className="flex flex-col gap-2">
+              <Label>Categoria do Projeto</Label>
+              <Input name="category" placeholder="ex: Vendas" />
+            </div>
+            <div className="flex flex-col gap-2">
               <Label>Projeto Publico</Label>
               <Select name="isPublic">
                 <SelectTrigger className="w-full">
@@ -108,8 +124,8 @@ export default function ProjectSettings({onCreated}: ProjectsSettingsProps) {
 
             <Button>Proseguir</Button>
           </form>
-        </SheetHeader>
-      </SheetContent>
-    </Sheet>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 }

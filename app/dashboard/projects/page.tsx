@@ -17,28 +17,8 @@ import {
 import useAuthContext from "@/hooks/use-auth";
 
 export default function Projects() {
-  const [filter, setFilter] = useState<string>("");
-  const [filterDate, setFilterDate] = useState<string>("");
-  const { projectList, setDataProjectList } = useProjects();
   const { user } = useAuthContext();
 
-  const filterProjects =
-    filter.trim() !== ""
-      ? projectList.filter((p) =>
-          p.title.toLowerCase().includes(filter.toLowerCase())
-        )
-      : projectList;
-
-  const filterByDate =
-    filterDate.trim() !== "" && filterDate.trim() === "news"
-      ? [...filterProjects].sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        )
-      : [...filterProjects].sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
 
   return (
     <section className="w-full animate-fadeIn  md:w-full p-2">

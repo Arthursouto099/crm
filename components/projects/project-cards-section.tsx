@@ -1,4 +1,3 @@
-import { Project } from "@/api/types/project.types";
 import { ProjectCard } from "./project-card";
 import { FileSearchCornerIcon, FolderOpen } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../ui/card";
@@ -6,16 +5,15 @@ import { Input } from "../ui/input";
 import { SelectByDate, SelectByStatus } from "@/app/dashboard/projects/page";
 import ProjectSettings from "../project-settings-create";
 import { useState } from "react";
-import useAuthContext from "@/hooks/use-auth";
 import useProjects from "@/hooks/use-projects";
 
-export default function ProjectCardsSection({}: {}) {
+export default function ProjectCardsSection() {
   const [filter, setFilter] = useState<string>("");
   const [filterDate, setFilterDate] = useState<string>("");
   const { projectList, setDataProjectList } = useProjects();
   const [statusFilter, setStatusFilter] = useState<string>("");
 
-  const { user } = useAuthContext();
+
 
   const filterProjects =
     filter.trim() !== ""

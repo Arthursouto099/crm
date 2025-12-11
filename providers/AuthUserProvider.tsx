@@ -1,12 +1,15 @@
 "use client";
-import { User, UserLoggedContext } from "@/contexts/UserLogged";
+
+import { ReactNode, useEffect, useState } from "react";
+import { UserLoggedContext } from "@/contexts/UserLogged";
+import { UserModel } from "@/api/types/user.types";
 import { jwtDecode } from "jwt-decode";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import userServices from "@/api/services/auth.services";
 
 const TOKEN_KEY = "auth_token";
 
 type AuthState = {
-  user: User | null;
+  user: UserModel | null;
   token: string | null;
 };
 
@@ -16,39 +19,47 @@ export default function AuthUserProvider({ children }: { children: ReactNode }) 
     token: null,
   });
 
+  // Função central: dado um token, busca o usuário na API e atualiza o estado
+  async function fetchUserFromApi(currentToken: string) {
+    try {
+      // supondo que seu token tenha { id_user: string }
+      const decoded = jwtDecode<{ id_user: string }>(currentToken);
 
+      const { data } = await userServices.getUser(currentToken, decoded.id_user);
+
+      setAuth({
+        token: currentToken,
+        user: data.user as UserModel,
+      });
+    } catch (e) {
+      console.error("Erro ao carregar usuário a partir da API:", e);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(TOKEN_KEY);
+      }
+      setAuth({ user: null, token: null });
+    }
+  }
+
+  // Carrega token do localStorage e chama a API ao montar
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const savedToken = localStorage.getItem(TOKEN_KEY);
     if (!savedToken) return;
 
-    try {
-      const decoded = jwtDecode<User>(savedToken);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAuth({
-        token: savedToken,
-        user: decoded,
-      });
-    } catch {
-      localStorage.removeItem(TOKEN_KEY);
-      setAuth({ user: null, token: null });
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchUserFromApi(savedToken);
   }, []);
 
-  function login(newToken: string) {
+  async function login(newToken: string) {
     try {
-      const decoded = jwtDecode<User>(newToken);
       if (typeof window !== "undefined") {
         localStorage.setItem(TOKEN_KEY, newToken);
       }
 
-      setAuth({
-        token: newToken,
-        user: decoded,
-      });
+      await fetchUserFromApi(newToken);
     } catch (e) {
-      console.error(e);
+      console.error("Erro no login:", e);
     }
   }
 
@@ -59,16 +70,29 @@ export default function AuthUserProvider({ children }: { children: ReactNode }) 
     setAuth({ user: null, token: null });
   }
 
-  const value = useMemo(
-    () => ({
-      user,
-      token,
-      isAuthenticated: !!user,
-      login,
-      logout,
-    }),
-    [user, token]
-  );
+  // Atualizar alguma propriedade do usuário no contexto (após editar perfil, por exemplo)
+  function alterUserProp<K extends keyof UserModel>(key: K, value: UserModel[K]) {
+    setAuth((prev) => {
+      if (!prev.user) return prev;
+
+      return {
+        token: prev.token,
+        user: {
+          ...prev.user,
+          [key]: value,
+        },
+      };
+    });
+  }
+
+  const value = {
+    user,
+    token,
+    isAuthenticated: !!user,
+    login,
+    logout,
+    alterUserProp,
+  };
 
   return (
     <UserLoggedContext.Provider value={value}>

@@ -9,4 +9,5 @@ export type Project = {
   ownerId: string;
   createdAt: Date;
   updatedAt: Date;
+  category: string
 };

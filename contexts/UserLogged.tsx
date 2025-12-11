@@ -1,4 +1,5 @@
 "use client";
+import { UserModel } from "@/api/types/user.types";
 import { createContext } from "react";
 
 enum Roles {
@@ -15,11 +16,13 @@ export type User = {
 };
 
 interface AuthContextType {
-  user: User | null;
+  user: UserModel | null;
   token: string | null;
   isAuthenticated: boolean;
   login: (token: string) => void;
   logout: () => void;
+
+ 
 }
 
 export const UserLoggedContext = createContext<AuthContextType | null>(null);
