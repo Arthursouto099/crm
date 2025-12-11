@@ -1,4 +1,11 @@
 "use client";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,16 +18,22 @@ import {
 import useAuthContext from "@/hooks/use-auth";
 import { LayoutDashboard, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { ReactNode } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const { user } = useAuthContext();
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <section className="w-full h-full flex items-center justify-center">
       <div className="w-full max-w-7xl  flex flex-col gap-4 md:gap-6">
-
         {/* Boas-vindas */}
+
+        <div className="py-5">
+            <CarouselMedia data={medias}/>
+        </div>
+
         <Card className="bg-accent/20 border border-border/60">
           <CardHeader>
             <div className="flex items-center gap-3 md:gap-4">
@@ -55,17 +68,18 @@ export default function Home() {
               </CardTitle>
 
               <CardDescription className="max-w-xl text-sm md:text-base leading-relaxed text-muted-foreground">
-                Este ambiente foi desenvolvido para trazer clareza ao seu fluxo de
-                trabalho. Aqui você encontrará recursos que apoiam o planejamento,
-                o acompanhamento e a execução dos seus projetos, com uma estrutura
-                simples, organizada e pensada para facilitar sua rotina diária.
+                Este ambiente foi desenvolvido para trazer clareza ao seu fluxo
+                de trabalho. Aqui você encontrará recursos que apoiam o
+                planejamento, o acompanhamento e a execução dos seus projetos,
+                com uma estrutura simples, organizada e pensada para facilitar
+                sua rotina diária.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-                <Button className="bg-violet-600 hover:bg-violet-500 text-white">
-                        Saber Mais
-                </Button>
+              <Button className="bg-violet-600 hover:bg-violet-500 text-white">
+                Saber Mais
+              </Button>
             </CardContent>
           </Card>
 
@@ -112,9 +126,6 @@ export default function Home() {
               </p>
             </CardContent>
           </Card>
-
-
-          
         </div>
 
         {/* Próximo passo / chamada suave para ação */}
@@ -133,18 +144,20 @@ export default function Home() {
 
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Explore uma visão clara e organizada do seu projeto. Aqui você
-                acompanha o que já avançou, identifica o que precisa de atenção e
-                mantém o trabalho fluindo com segurança e propósito.
+                acompanha o que já avançou, identifica o que precisa de atenção
+                e mantém o trabalho fluindo com segurança e propósito.
               </p>
 
               <p className="text-sm text-muted-foreground leading-relaxed">
                 O dashboard reúne progresso, tarefas, responsáveis e indicadores
-                em um espaço único, pensado para dar tranquilidade e ritmo ao seu
-                dia.
+                em um espaço único, pensado para dar tranquilidade e ritmo ao
+                seu dia.
               </p>
 
               <Button
-                onClick={() => {router.push("/dashboard/projects")}}
+                onClick={() => {
+                  router.push("/dashboard/projects");
+                }}
                 variant="default"
                 className="mt-2 w-fit bg-violet-600 hover:bg-violet-700 text-white"
               >
@@ -153,8 +166,82 @@ export default function Home() {
             </div>
           </div>
         </Card>
-
       </div>
     </section>
+  );
+}
+
+
+
+
+export const medias = [
+<div className="flex flex-col md:flex-row gap-6 items-start">
+  {/* IMAGEM */}
+ <div className="relative flex-1  h-70 rounded-lg overflow-hidden shadow-md">
+  <img
+    className="w-full h-full object-cover"
+    src="https://images.pexels.com/photos/3182827/pexels-photo-3182827.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    alt="Primeiro passo"
+  />
+
+  {/* Degradê vindo da direita */}
+  <div className="absolute inset-0 bg-gradient-to-l from-black/70 to-transparent" />
+</div>
+  {/* TEXTOS */}
+  <div className="flex-2 flex flex-col gap-3">
+    <div className="text-5xl border border-violet-500/30 font-bold flex justify-center items-center rounded-md  bg-violet-500/10 w-20 h-20 p-5">
+      <h1 className="text-violet-400">1</h1>
+    </div>
+
+    <h1 className="text-xl md:text-4xl font-bold text-zinc-700 dark:text-zinc-300">
+     Primeiros <span className="text-violet-400">Passos</span>.
+    </h1>
+    <ul className="text-sm md:mt-10 font-medium space-y-2">
+  <li className="flex items-start gap-2">
+    <span className="mt-1 h-2 w-2 rounded-full bg-violet-400"></span>
+    <span>
+      Crie um Projeto em{" "}
+      <Link
+        className="text-violet-400 border-0 border-b border-b-violet-400"
+        href={"/dashboard/projects"}
+      >
+        Projetos
+      </Link>.
+    </span>
+  </li>
+
+  <li className="flex items-start gap-2">
+    <span className="mt-1 h-2 w-2 rounded-full bg-violet-400"></span>
+    <span>Adicione colabaoradores</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="mt-1 h-2 w-2 rounded-full bg-violet-400"></span>
+    <span>Gerencie seus projetos e planos,</span>
+  </li>
+</ul>
+  </div>
+</div>,
+  <div className=" ">Slide 2</div>,
+  <div className=" ">Slide 3</div>,
+];
+
+
+interface CarouselMediaProps {
+  data: ReactNode[];
+}
+
+function CarouselMedia({ data }: CarouselMediaProps) {
+  return (
+    <Carousel className="w-full h-full">
+      <CarouselContent>
+        {data.map((item, index) => (
+          <CarouselItem key={index}>
+            <div className="h-96 h-full w-full flex flex-col justify-center    ">
+              <span className="text-xl font-bold">{item}</span>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+    </Carousel>
   );
 }

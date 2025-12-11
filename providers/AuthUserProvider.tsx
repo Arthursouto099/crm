@@ -21,6 +21,8 @@ export default function AuthUserProvider({ children }: { children: ReactNode }) 
 
   // Função central: dado um token, busca o usuário na API e atualiza o estado
   async function fetchUserFromApi(currentToken: string) {
+    if(!currentToken) return
+    
     try {
       // supondo que seu token tenha { id_user: string }
       const decoded = jwtDecode<{ id_user: string }>(currentToken);

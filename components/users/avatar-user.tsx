@@ -11,7 +11,7 @@ interface AvatarUploadProps {
 export function AvatarUpload({ onUpload }: AvatarUploadProps) {
   const { user } = useAuthContext();
   const [preview, setPreview] = useState<string>(
-    user?.profile_image ?? "https://github.com/shadcn.png"
+    user?.profile_image || "https://github.com/shadcn.png"
   );
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
