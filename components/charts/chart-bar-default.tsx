@@ -1,103 +1,81 @@
-"use client"
+"use client";
 
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Project } from "@/api/types/project.types"
-import React from "react"
+  type ChartConfig,
+} from "@/components/ui/chart";
 
-export const description = "A bar chart"
+export type Metrics = {
+  day: Date; // "2026-01-16" (recomendado)
+  departures: number;
+  entries: number;
+};
 
-interface ChartBarProps {
-  data: Project[]
-}
+const chartConfig = {
+  departures: {
+    label: "Saídas",
+    color: "var(--chart-1)",
+  },
+  entries: {
+    label: "Entradas",
+    color: "var(--chart-2)",
+  },
+} satisfies ChartConfig;
 
-function useProjectsByStatus(projects: Project[]) {
-  return React.useMemo(() => {
-    const map = new Map<string, number>()
 
-    projects.forEach((p) => {
-      const status = p.status
-      map.set(status, (map.get(status) || 0) + 1)
-    })
-
-    return Array.from(map.entries()).map(([status, total], index) => ({
-      status,
-      total,
-      fill: `var(--chart-${(index % 5) + 1})`,
-    }))
-  }, [projects])
-}
-
-export function ChartBarDefault({ data }: ChartBarProps) {
-  const chartData = useProjectsByStatus(data)
-
-  const chartConfig: ChartConfig = React.useMemo(() => {
-    const cfg: ChartConfig = {}
-
-    chartData.forEach((item) => {
-      cfg[item.status] = {
-        label: item.status,
-        color: item.fill,
-      }
-    })
-
-    return cfg
-  }, [chartData])
-
+export function ChartTooltipDefault({ data }: { data: Metrics[] }) {
   return (
-    <Card>
+    <Card className="p-2 border-none">
       <CardHeader>
-        <CardTitle>Projetos por Status</CardTitle>
-        <CardDescription>Distribuição dos projetos</CardDescription>
+        <CardTitle></CardTitle>
+        <CardDescription></CardDescription>
       </CardHeader>
 
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-
-            {/* Corrigido: o eixo deve mostrar o status */}
+          <BarChart accessibilityLayer data={Array.isArray(data) ? data : []}>
             <XAxis
-              dataKey="status"
+              dataKey="day"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
+              tickFormatter={(value) =>
+                new Date(value).toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              }
             />
 
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+            <ChartTooltip content={<ChartTooltipContent />} cursor={false} />
 
-            {/* Corrigido: agora usa "total" */}
-            <Bar dataKey="total" radius={8} />
+            <Bar
+              dataKey="departures"
+              stackId="a"
+              fill="var(--color-departures)"
+              radius={[0, 0, 6, 6]}
+            />
+            <Bar
+              dataKey="entries"
+              stackId="a"
+              fill="var(--color-entries)"
+              radius={[6, 6, 0, 0]}
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>
-
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total projects by status
-        </div>
-      </CardFooter>
     </Card>
-  )
+  );
 }
