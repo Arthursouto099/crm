@@ -15,6 +15,8 @@ import { productServices } from "@/src/api/services/product.services";
 import { MovementStockModel } from "@/src/api/types/movementStock.types";
 import { CustomerModel } from "@/src/api/types/customer.types";
 import CustomerCreateModal from "../customer/customerCreateModal";
+import { CustomersServices } from "@/src/api/services/customer.services";
+import { toast } from "sonner";
 
 type Props = {
   id_store: string;
@@ -133,10 +135,14 @@ export function RowActionsMovement({ id_store, movement }: PropsMovement) {
 interface PropsCustomers {
   id_store: string;
   customer: CustomerModel;
-  onSuccess: (p: CustomerModel) => void
+  onSuccess: (p: CustomerModel) => void;
 }
 
-export function RowActionsCustomers({ id_store, customer, onSuccess }: PropsCustomers) {
+export function RowActionsCustomers({
+  id_store,
+  customer,
+  onSuccess,
+}: PropsCustomers) {
   const [openEdit, setOpenEdit] = React.useState(false);
 
   return (
@@ -155,13 +161,18 @@ export function RowActionsCustomers({ id_store, customer, onSuccess }: PropsCust
 
           <DropdownMenuItem
             className="gap-2 cursor-pointer"
+            onClick={async () => {
+              await CustomersServices.deleteCustomer(customer.id_customer, id_store);
+              toast.success("Cliente deletado");
+              onSuccess(customer);
+            }}
             onSelect={(e) => {
               e.preventDefault();
               setOpenEdit(true);
             }}
           >
-            <ViewIcon className="h-4 w-4" />
-            Visualizar
+            <Trash2 className="h-4 w-4" />
+            Deletar
           </DropdownMenuItem>
 
           <DropdownMenuItem
@@ -174,7 +185,6 @@ export function RowActionsCustomers({ id_store, customer, onSuccess }: PropsCust
             <CustomerCreateModal
               asChildButton
               onSuccess={(p) => onSuccess(p)}
-              
               id_store={id_store}
               customer={customer}
             >

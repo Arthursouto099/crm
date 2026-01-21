@@ -1,5 +1,9 @@
 import { api } from "../config/api";
-import { createCustomerBase } from "../types/customer.types";
+import {
+  createAddressBase,
+  createCustomerBase,
+  editAddressBase,
+} from "../types/customer.types";
 import { Pagination } from "./product.services";
 
 export const CustomersServices = {
@@ -15,6 +19,17 @@ export const CustomersServices = {
     }),
   create: (data: createCustomerBase, id_store: string) =>
     api.post(`/customer/${id_store}/create`, data, { withCredentials: true }),
-  update: (data: createCustomerBase, id_customer: string) =>
-    api.patch(`/customer/${id_customer}/edit`, data, { withCredentials: true }),
+  update: (data: createCustomerBase, id_customer: string, id_store: string) =>
+    api.patch(`/customer/${id_store}/${id_customer}/edit`, data, { withCredentials: true }),
+
+  updateAddress: (data: Partial<editAddressBase>, id_customerAddress: string, id_store: string) =>
+    api.patch(`/customer/${id_store}/${id_customerAddress}/address/edit`, data, {
+      withCredentials: true,
+    }),
+
+  createAddress: (data: createAddressBase, id_store: string) =>
+    api.post(`/customer/${id_store}/address/create`, data, { withCredentials: true }),
+
+  deleteCustomer: (id_customer: string , id_store: string) =>
+    api.delete(`/customer/${id_store}/${id_customer}/delete`, { withCredentials: true }),
 };

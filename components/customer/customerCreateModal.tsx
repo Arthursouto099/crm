@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { AlertCircle, Box, Pencil, Plus } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowDownToLine,
+  ArrowUpToLine,
+  Box,
+  Pencil,
+  Plus,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -16,8 +23,10 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
 import {
+  createAddressBase,
   createCustomerBase,
   CustomerModel,
+  editAddressBase,
 } from "@/src/api/types/customer.types";
 
 type Props = {
@@ -76,16 +85,16 @@ export default function CustomerCreateModal({
         </DialogTrigger>
       )}
 
-     <DialogContent
-  onKeyDownCapture={(e) => {
-    // bloqueia atalhos do DataTable/Row (space, arrows, etc.)
-    e.stopPropagation();
-  }}
-  className={[
-    "overflow-auto max-h-[90vh] w-[95vw]",
-    isEdit ? "max-w-[1200px]" : "max-w-[900px]",
-  ].join(" ")}
->
+      <DialogContent
+        onKeyDownCapture={(e) => {
+          // bloqueia atalhos do DataTable/Row (space, arrows, etc.)
+          e.stopPropagation();
+        }}
+        className={[
+          "overflow-auto max-h-[90vh] w-[95vw]",
+          isEdit ? "max-w-[1200px]" : "max-w-[900px]",
+        ].join(" ")}
+      >
         <DialogHeader className="mb-6">
           <DialogTitle className="flex items-center gap-3">
             <Box /> {isEdit ? "Editar Cliente" : "Adicionar Cliente"}
@@ -121,6 +130,7 @@ import {
 import { CustomersServices } from "@/src/api/services/customer.services";
 import { FormEvent, ReactNode, useEffect, useState } from "react";
 import axios from "axios";
+import { Badge } from "../ui/badge";
 
 type CustomerModalProps = {
   customer?: CustomerModel | null;
@@ -156,6 +166,7 @@ export function CustomerFormModal({
   const [city, setCity] = useState("");
   const [stateUf, setStateUf] = useState("");
   const [country, setCountry] = useState("");
+  const [isEditAddress, setEditAddress] = useState<boolean>(false);
 
   useEffect(() => {
     if (!customer) {
@@ -227,14 +238,46 @@ export function CustomerFormModal({
       };
 
       if (isEdit && customer) {
-        // ajuste para seu serviço real
-
         const { address, ...rest } = payload;
+
+        const subData: Partial<editAddressBase> = {
+          cep: address?.cep,
+          city: address?.city,
+          complement: address?.complement,
+          country: address?.country,
+          number: address?.number,
+          state: address?.state,
+          street: address?.state,
+        };
 
         const { data } = await CustomersServices.update(
           rest,
           customer.id_customer!,
+          id_store,
         );
+
+        if (customer.mainAddress && isEditAddress) {
+          await CustomersServices.updateAddress(
+            subData,
+            customer.mainAddress.id_customerAddress,
+            id_store,
+          );
+        }
+
+        if (isEditAddress && !customer.mainAddress && address) {
+          const createSubData: createAddressBase = {
+            cep: address.cep,
+            city: address.city,
+            complement: address.complement,
+            country: address.country,
+            number: address.number,
+            state: address.state,
+            street: address.state,
+            id_customer: customer.id_customer,
+          };
+
+          await CustomersServices.createAddress(createSubData, id_store);
+        }
 
         toast.success("Cliente atualizado com sucesso");
         onSuccess?.(data.customer);
@@ -258,7 +301,7 @@ export function CustomerFormModal({
     try {
       const { data } = await cepServices.find(cep);
       setCity(data.localidade);
-      setStateUf(data.estado);
+      setStateUf(data.uf);
       setStreet(data.logradouro);
     } catch {}
     return {
@@ -389,13 +432,28 @@ export function CustomerFormModal({
       </div>
 
       {/* Endereço principal (UI igual ao padrão do form) */}
-      <div className="col-span-1 md:col-span-2 space-y-2">
+      <div className={`col-span-1 md:col-span-2 space-y-2`}>
         <Label className="text-sm font-medium flex items-center gap-2">
           <MapPin className="h-4 w-4 text-muted-foreground" />
           Endereço principal (opcional)
         </Label>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Badge
+          className="px-2 py-2 rounded-md cursor-pointer  font-medium text-xs bg-violet-500/30 text-white"
+          variant={"default"}
+          onClick={() => setEditAddress((prev) => !prev)}
+        >
+          Exibir Informações de Endereço{" "}
+          {isEditAddress ? (
+            <ArrowUpToLine size={14} />
+          ) : (
+            <ArrowDownToLine size={14} />
+          )}
+        </Badge>
+
+        <div
+          className={`grid grid-cols-1  ${!isEditAddress ? "hidden" : ""}  md:grid-cols-2 gap-4`}
+        >
           <div className="flex flex-col gap-2">
             <Label className="text-sm font-medium text-foreground/90">
               CEP
