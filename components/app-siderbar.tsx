@@ -30,17 +30,16 @@ import {
   SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 
-
-interface AppSideBarParams  {
-  id_store?: string
+interface AppSideBarParams {
+  id_store?: string;
 }
 
-
-export function AppSidebar({id_store}: AppSideBarParams) {
+export function AppSidebar({ id_store }: AppSideBarParams) {
   const pathname = usePathname();
 
   const isActive = (url: string) => pathname === url;
-  const isSectionActive = (urls: string[]) => urls.some((u) => pathname.startsWith(u));
+  const isSectionActive = (urls: string[]) =>
+    urls.some((u) => pathname.startsWith(u));
 
   return (
     <Sidebar className="">
@@ -54,20 +53,28 @@ export function AppSidebar({id_store}: AppSideBarParams) {
             <SidebarMenu>
               {/* Dashboard */}
               <SidebarMenuItem>
-                <SidebarMenuButton asChild className={isActive("/dashboard") ? "bg-accent" : ""}>
+                <SidebarMenuButton
+                  asChild
+                  className={isActive("/dashboard") ? "bg-accent" : ""}
+                >
                   <Link href="/dashboard" className="flex items-center gap-3">
                     <LucideLayoutDashboard className="h-4 w-4" />
                     <span className="text-sm font-medium">Dashboard</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              
-                    <SidebarMenuItem>
+
+              <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  className={isSectionActive(["/dashboard/estoque"]) ? "bg-accent" : ""}
+                  className={
+                    isSectionActive(["/dashboard/estoque"]) ? "bg-accent" : ""
+                  }
                 >
-                  <Link href="/dashboard/estoque" className="flex items-center gap-3">
+                  <Link
+                    href="/dashboard/estoque"
+                    className="flex items-center gap-3"
+                  >
                     <Store className="h-4 w-4" />
                     <span className="text-sm font-medium">Loja</span>
                   </Link>
@@ -77,23 +84,35 @@ export function AppSidebar({id_store}: AppSideBarParams) {
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton
                       asChild
-                      className={isActive("/dashboard/estoque/produtos") ? "bg-accent" : ""}
+                      className={
+                        isActive("/dashboard/estoque/produtos")
+                          ? "bg-accent"
+                          : ""
+                      }
                     >
-                      <Link href={`/store/${id_store}/edit`} className="flex items-center gap-3">
+                      <Link
+                        href={`/store/${id_store}/edit`}
+                        className="flex items-center gap-3"
+                      >
                         <PackageSearch className="h-4 w-4" />
                         <span>Editar Loja</span>
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
 
-             
-
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton
                       asChild
-                      className={isActive("/dashboard/estoque/entradas") ? "bg-accent" : ""}
+                      className={
+                        isActive("/dashboard/estoque/entradas")
+                          ? "bg-accent"
+                          : ""
+                      }
                     >
-                      <Link href={`/store/${id_store}/entry`} className="flex items-center gap-3">
+                      <Link
+                        href={`/store/${id_store}/entry`}
+                        className="flex items-center gap-3"
+                      >
                         <PackagePlus className="h-4 w-4" />
                         <span>Entradas</span>
                       </Link>
@@ -106,35 +125,52 @@ export function AppSidebar({id_store}: AppSideBarParams) {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  className={isSectionActive(["/dashboard/estoque"]) ? "bg-accent" : ""}
+                  className={
+                    isSectionActive(["/dashboard/estoque"]) ? "bg-accent" : ""
+                  }
                 >
-                  <Link href="/dashboard/estoque" className="flex items-center gap-3">
+                  <Link
+                    href="/dashboard/estoque"
+                    className="flex items-center gap-3"
+                  >
                     <Boxes className="h-4 w-4" />
                     <span className="text-sm font-medium">Estoque</span>
                   </Link>
                 </SidebarMenuButton>
 
-                
-
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton
                       asChild
-                      className={isActive("/dashboard/estoque/produtos") ? "bg-accent" : ""}
+                      className={
+                        isActive("/dashboard/estoque/produtos")
+                          ? "bg-accent"
+                          : ""
+                      }
                     >
-                      <Link href={`/store/${id_store}/products`} className="flex items-center gap-3">
+                      <Link
+                        href={`/store/${id_store}/products`}
+                        className="flex items-center gap-3"
+                      >
                         <PackageSearch className="h-4 w-4" />
                         <span>Produtos</span>
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
 
-                        <SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
                     <SidebarMenuSubButton
                       asChild
-                      className={isActive("/dashboard/estoque/entradas") ? "bg-accent" : ""}
+                      className={
+                        isActive("/dashboard/estoque/entradas")
+                          ? "bg-accent"
+                          : ""
+                      }
                     >
-                      <Link href={`/store/${id_store}/stockDashboard`} className="flex items-center gap-3">
+                      <Link
+                        href={`/store/${id_store}/stockDashboard`}
+                        className="flex items-center gap-3"
+                      >
                         <LayoutDashboard className="h-4 w-4" />
                         <span>DashBoard</span>
                       </Link>
@@ -144,9 +180,16 @@ export function AppSidebar({id_store}: AppSideBarParams) {
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton
                       asChild
-                      className={isActive("/dashboard/estoque/entradas") ? "bg-accent" : ""}
+                      className={
+                        isActive("/dashboard/estoque/entradas")
+                          ? "bg-accent"
+                          : ""
+                      }
                     >
-                      <Link href={`/store/${id_store}/entry`} className="flex items-center gap-3">
+                      <Link
+                        href={`/store/${id_store}/entry`}
+                        className="flex items-center gap-3"
+                      >
                         <PackagePlus className="h-4 w-4" />
                         <span>Entradas</span>
                       </Link>
@@ -159,9 +202,14 @@ export function AppSidebar({id_store}: AppSideBarParams) {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  className={isSectionActive(["/dashboard/vendas"]) ? "bg-accent" : ""}
+                  className={
+                    isSectionActive(["/dashboard/vendas"]) ? "bg-accent" : ""
+                  }
                 >
-                  <Link href="/dashboard/vendas" className="flex items-center gap-3">
+                  <Link
+                    href="/dashboard/vendas"
+                    className="flex items-center gap-3"
+                  >
                     <ShoppingCart className="h-4 w-4" />
                     <span className="text-sm font-medium">Vendas</span>
                   </Link>
@@ -171,9 +219,14 @@ export function AppSidebar({id_store}: AppSideBarParams) {
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton
                       asChild
-                      className={isActive("/dashboard/vendas/pedidos") ? "bg-accent" : ""}
+                      className={
+                        isActive("/dashboard/vendas/pedidos") ? "bg-accent" : ""
+                      }
                     >
-                      <Link href="/dashboard/vendas/pedidos" className="flex items-center gap-3">
+                      <Link
+                        href={`/store/${id_store}/sales`}
+                        className="flex items-center gap-3"
+                      >
                         <Receipt className="h-4 w-4" />
                         <span>Pedidos</span>
                       </Link>
@@ -183,9 +236,16 @@ export function AppSidebar({id_store}: AppSideBarParams) {
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton
                       asChild
-                      className={isActive("/dashboard/vendas/clientes") ? "bg-accent" : ""}
+                      className={
+                        isActive("/dashboard/vendas/clientes")
+                          ? "bg-accent"
+                          : ""
+                      }
                     >
-                      <Link href={`/store/${id_store}/customers`} className="flex items-center gap-3">
+                      <Link
+                        href={`/store/${id_store}/customers`}
+                        className="flex items-center gap-3"
+                      >
                         <Users className="h-4 w-4" />
                         <span>Clientes</span>
                       </Link>
@@ -198,9 +258,14 @@ export function AppSidebar({id_store}: AppSideBarParams) {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  className={isSectionActive(["/dashboard/profile"]) ? "bg-accent" : ""}
+                  className={
+                    isSectionActive(["/dashboard/profile"]) ? "bg-accent" : ""
+                  }
                 >
-                  <Link href="/dashboard/profile" className="flex items-center gap-3">
+                  <Link
+                    href="/dashboard/profile"
+                    className="flex items-center gap-3"
+                  >
                     <User className="h-4 w-4" />
                     <span className="text-sm font-medium">Perfil</span>
                   </Link>
@@ -211,9 +276,14 @@ export function AppSidebar({id_store}: AppSideBarParams) {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  className={isSectionActive(["/dashboard/settings"]) ? "bg-accent" : ""}
+                  className={
+                    isSectionActive(["/dashboard/settings"]) ? "bg-accent" : ""
+                  }
                 >
-                  <Link href="/dashboard/settings" className="flex items-center gap-3">
+                  <Link
+                    href="/dashboard/settings"
+                    className="flex items-center gap-3"
+                  >
                     <Settings className="h-4 w-4" />
                     <span className="text-sm font-medium">Configurações</span>
                   </Link>

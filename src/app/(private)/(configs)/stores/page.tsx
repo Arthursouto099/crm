@@ -84,11 +84,11 @@ export default function Home() {
 const filterDataList = (
   data: StoreModel[],
   key: "store_name",
-  target: string
+  target: string,
 ) => {
   if (target.trim() === "") return data;
   return data.filter((store) =>
-    store[key].toUpperCase().includes(target.toUpperCase())
+    store[key].toUpperCase().includes(target.toUpperCase()),
   );
 };
 
@@ -216,7 +216,12 @@ const CreateStoreModal = ({ onSuccess, id_user }: createStoreModalProps) => {
               <ImageIcon className="h-4 w-4 text-muted-foreground" />
               Imagem da loja
             </Label>
-            <Input onChange={handleChangeImage} type="file" className="text-foreground/60 text-sm " accept="image/*" />
+            <Input
+              onChange={handleChangeImage}
+              type="file"
+              className="text-foreground/60 text-sm "
+              accept="image/*"
+            />
             <p className="text-foreground/40 text-xs">
               Banner da sua loja, coloque informações cruciais ou promoções.
             </p>
@@ -240,7 +245,12 @@ const CreateStoreModal = ({ onSuccess, id_user }: createStoreModalProps) => {
               <ImagesIcon className="h-4 w-4 text-muted-foreground" />
               Logo da loja
             </Label>
-            <Input onChange={handleChangeLogo}  className="text-foreground/60 text-sm " type="file" accept="image/*" />
+            <Input
+              onChange={handleChangeLogo}
+              className="text-foreground/60 text-sm "
+              type="file"
+              accept="image/*"
+            />
             <p className="text-foreground/40 text-xs">
               Escolha algo que represente sua identidade visual.
             </p>

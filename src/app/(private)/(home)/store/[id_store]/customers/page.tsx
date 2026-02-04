@@ -25,7 +25,7 @@ export default function CustomersPage() {
               .toLowerCase()
               .includes(filterTarget.toLowerCase()) ||
             c.document_customer.includes(filterTarget) ||
-            c.phone_customer?.includes(filterTarget) || 
+            c.phone_customer?.includes(filterTarget) ||
             c.email_customer?.includes(filterTarget)
           ) {
             return c;
@@ -46,7 +46,7 @@ export default function CustomersPage() {
   return (
     <section>
       <div className="mt-5 w-full">
-        <div className="py-5 w-full flex justify-between items-center">
+        <div className="py-5 w-full flex justify-between gap-3 items-center">
           <div className="relative w-full max-w-md">
             <LucideSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input

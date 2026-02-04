@@ -12,4 +12,5 @@ export type ProductModel = {
     stock_quantity: number | null;
     low_stock_at: number | null;
     category: string
+    quantity: number | null
 }

@@ -2,18 +2,11 @@
 "use client";
 
 import {
-  AlertCircle,
   Box,
-  Boxes,
   BoxesIcon,
-  CircleDollarSignIcon,
-  ImagesIcon,
   LucideSearch,
   PackageMinus,
   PackagePlus,
-  Pencil,
-  Plus,
-  PlusCircle,
   X,
 } from "lucide-react";
 import { Button } from "../ui/button";
@@ -28,8 +21,7 @@ import {
 } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from "react";
+import {  FormEvent, ReactNode, useEffect, useState } from "react";
 import { productServices } from "@/src/api/services/product.services";
 import { ProductModel } from "@/src/api/types/product.types";
 import { toast } from "sonner";
@@ -57,8 +49,6 @@ export default function ProductMovementModal({
   onOpenChange,
   children,
 }: Props & { children: ReactNode }) {
- 
-
   const isControlled = typeof open === "boolean" && !!onOpenChange;
 
   return (
@@ -71,9 +61,7 @@ export default function ProductMovementModal({
           <DialogTitle className="flex items-center gap-3">
             <Box /> Comparação/Ação
           </DialogTitle>
-          <DialogDescription>
-            
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
 
         <ProductForm
@@ -106,13 +94,13 @@ export function ProductMovementInitialModal({
   const [targetFill, setTargetFill] = useState<string>("");
 
   const [productSelected, setProductSelect] = useState<ProductModel | null>(
-    null
+    null,
   );
 
   const filterData =
     targetFill.trim() !== ""
       ? products.filter((p) =>
-          p.product_name.toLowerCase().includes(targetFill.toLowerCase())
+          p.product_name.toLowerCase().includes(targetFill.toLowerCase()),
         )
       : products;
 
@@ -129,11 +117,14 @@ export function ProductMovementInitialModal({
       {/* Trigger só aparece no modo NÃO-controlado */}
       {!isControlled && (
         <DialogTrigger asChild>
-          <Button><Box/>ENTRADA/SAIDA</Button>
+          <Button>
+            <Box />
+            ENTRADA/SAIDA
+          </Button>
         </DialogTrigger>
       )}
 
-      <DialogContent className=" min-w-4xl overflow-auto md:overflow-hidden max-h-[80%] md:max-h-full">
+      <DialogContent className=" md:min-w-4xl overflow-auto md:overflow-hidden max-h-[80%] md:max-h-full">
         <DialogHeader className="mb-6">
           <DialogTitle className="flex items-center gap-3">
             <Box /> ENTRADA/SAIDA ESTOQUE
@@ -283,25 +274,41 @@ function ProductForm({
           <h1>Estoque Atual: {product.stock_quantity}</h1>
           <h1>
             {" "}
-        {Number(delta) > 0 ? "Valor a ser adicionado" : "valor a ser retirado"}: {typeof delta === "number" ? delta : 0}
+            {Number(delta) > 0
+              ? "Valor a ser adicionado"
+              : "valor a ser retirado"}
+            : {typeof delta === "number" ? delta : 0}
           </h1>
-          Comparação final: {Number(delta) > 0 ? product.stock_quantity! + Number(delta) : product.stock_quantity! + Number(delta)}
+          Comparação final:{" "}
+          {Number(delta) > 0
+            ? product.stock_quantity! + Number(delta)
+            : product.stock_quantity! + Number(delta)}
         </div>
       </div>
 
       <div className="flex gap-1 text-xs font-medium">
-            <div className={`p-2 border ${entryOrOut === "entry" && "bg-violet-500/40"} h-fit rounded-md cursor-pointer`} onClick={() => {
-                setEntryOrOut("entry")
-                setDelta("")
-            }}>
-                <h1 className={`flex items-center gap-2`}><PackagePlus size={13}/> ENTRADA</h1>
-                </div>
-            <div className={`p-2 border h-fit ${entryOrOut === "out" && "bg-violet-500/40"} rounded-md cursor-pointer`} onClick={() => {
-                setEntryOrOut("out")
-                setDelta("")
-            }}>
-                <h1 className={`flex items-center gap-2`}>< PackageMinus size={13}/> SAIDA</h1>
-                </div>
+        <div
+          className={`p-2 border ${entryOrOut === "entry" && "bg-violet-500/40"} h-fit rounded-md cursor-pointer`}
+          onClick={() => {
+            setEntryOrOut("entry");
+            setDelta("");
+          }}
+        >
+          <h1 className={`flex items-center gap-2`}>
+            <PackagePlus size={13} /> ENTRADA
+          </h1>
+        </div>
+        <div
+          className={`p-2 border h-fit ${entryOrOut === "out" && "bg-violet-500/40"} rounded-md cursor-pointer`}
+          onClick={() => {
+            setEntryOrOut("out");
+            setDelta("");
+          }}
+        >
+          <h1 className={`flex items-center gap-2`}>
+            <PackageMinus size={13} /> SAIDA
+          </h1>
+        </div>
       </div>
 
       <div className="col-span-1 md:col-span-2 flex flex-col gap-2">

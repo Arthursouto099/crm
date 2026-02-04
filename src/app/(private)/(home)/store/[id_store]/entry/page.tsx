@@ -47,13 +47,7 @@ export default function EnrtryPage() {
             <DataTable
               data={movements.movementsList}
               columns={getMovementStockColumns({
-                id_store,
-                onEdited() {
-                  refetch();
-                },
-                onDelete() {
-                  refetch();
-                },
+                id_store
               })}
             />
           </div>
